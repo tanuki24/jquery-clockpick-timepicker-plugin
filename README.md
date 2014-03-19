@@ -1,8 +1,6 @@
 jquery-clockpick-timepicker-plugin
 ==================================
 
-<h4><a href="http://www.jnathanson.com/index.cfm?page=jquery/clockpick/ClockPick">Click here to view a ClockPick demo</a></h4>
-
 <h2>Configuration</h2>
 <table width="640" border="0" cellpadding="6" cellspacing="1">
 <tr bgcolor="#f2f2f2">
@@ -22,10 +20,13 @@ Include the clockpick css file:<br>
 <strong>options</strong> (hash) - an object containing settings keys and their values<br>
 <strong>callback</strong> (function) - a callback function to run after ClockPick is run</p>
 <p>Example:</p>
-<p><strong>$(&quot;#clockpick&quot;).clockpick({<br>
+<p><strong>
+/* e.g. 6:00 to 15:30  */
+$(&quot;#clockpick&quot;).clockpick({<br>
 starthour : 6,<br>
 endhour : 15,<br>
-showminutes : false<br>
+endminute : 30,<br>
+turnhour : 9<br>
 }, mycallback<br>
 );
 </strong><br>

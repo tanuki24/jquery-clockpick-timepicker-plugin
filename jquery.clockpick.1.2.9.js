@@ -8,6 +8,8 @@ type	 jQuery
 param	 options                  hash                    object containing config options
 param	 options[starthour]       int                     starting hour (use military int)
 param	 options[endhour]         int                     ending hour (use military int)
+param	 options[endminute]       int                     ending minute
+param	 options[turnhour]        int                     turn Point
 param	 options[showminutes]     bool                    show minutes
 param 	 options[minutedivisions] int                     number of divisions, i.e. 4 = :00, :15, :30, :45
 param 	 options[military]        bool                    use 24hr time if true
@@ -27,6 +29,8 @@ jQuery.fn.clockpick = function(options, callback) {
 	var settings = {
 		starthour       : 8,
 		endhour         : 18,
+        endminute       : 30,
+        turnhour        : 15,
 		showminutes     : true,
 		minutedivisions : 4,
 		military        : false,
@@ -103,7 +107,11 @@ jQuery.fn.clockpick = function(options, callback) {
 				
 		function renderhours() {
 			// fill in the $hourcont div
-			var c = 1; 
+			var c = 1;
+            var turnpoint = 12;
+            if (settings.turnhour != null && settings.turnhour > settings.starthour && settings.turnhour <= settings.endhour ) {
+                turnpoint = settings.turnhour;
+            }
 			// counter as index 2 of hr id, gives us index 
 			// in group of hourdivs for calculating where to put minutecont on keydown
 			for (var h=settings.starthour; h<=settings.endhour; h++) {
@@ -127,7 +135,7 @@ jQuery.fn.clockpick = function(options, callback) {
 				if (!v) {
 					$hd.css("float","left");
 				}
-				(h<12) ? $hourcol1.append($hd) : $hourcol2.append($hd);
+				(h<turnpoint) ? $hourcol1.append($hd) : $hourcol2.append($hd);
 				c++;
 			}
 			$hourcont.append($hourcol1);
@@ -150,6 +158,9 @@ jQuery.fn.clockpick = function(options, callback) {
 				counter = 1;
 		
 			for(var m=0;m<60;m=m+n) {
+                if (h >= settings.endhour && settings.endminute != null && m > settings.endminute) {
+                    break;
+                }
 				$md = jQuery("<div class='CP_minute' id='" + realhours + "_" + m + "'>" 
 							 + displayhours + ":" + ((m<10) ? "0" : "") + m + tt 
 							 + "</div>");
@@ -287,13 +298,17 @@ jQuery.fn.clockpick = function(options, callback) {
 			if ( settings.showminutes ) {
 				$mc.hide();
 				renderminutes(h);
-				
+    			var turnpoint = 12;
+                if (settings.turnhour != null && settings.turnhour > settings.starthour && settings.turnhour <= settings.endhour ) {
+                    turnpoint = settings.turnhour;
+                }
+	
 				// set position & show minutes container
 				if (v) {
 					t = e.type == 'mouseover'
 						? e.pageY - 15
 						: $hourcont.offset().top + 2 + ($obj.height() * i);
-					if ( h < 12 )
+					if ( h < turnpoint )
 						l = $hourcont.offset().left - $mc.width() - 2;
 					else
 						l = $hourcont.offset().left + $hourcont.width() + 2;
@@ -302,7 +317,7 @@ jQuery.fn.clockpick = function(options, callback) {
 					l = (e.type == 'mouseover') 
 						? e.pageX - 10 
 						: $hourcont.offset().left + ($obj.width()-5) * i;
-					if(h<12) {
+					if(h<turnpoint) {
 						t = $hourcont.offset().top - $mc.height() - 2;
 					}
 					else {
