@@ -19,9 +19,8 @@ Include the clockpick css file:<br>
 <td><p>ClockPick takes two optional parameters:<br>
 <strong>options</strong> (hash) - an object containing settings keys and their values<br>
 <strong>callback</strong> (function) - a callback function to run after ClockPick is run</p>
-<p>Example:</p>
+<p>Example: 6:00 to 15:30</p>
 <p><strong>
-/* e.g. 6:00 to 15:30  */
 $(&quot;#clockpick&quot;).clockpick({<br>
 starthour : 6,<br>
 endhour : 15,<br>
